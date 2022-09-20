@@ -44,6 +44,10 @@ dependencies:
   flappy_search_bar: ^1.7.2
   provider: ^6.0.3
   carousel_slider: ^4.0.0
+  font_awesome_flutter: ^10.2.1
+  banner_listtile: ^2.2.0
+  pdf: ^3.8.3
+  printing: ^5.9.3
 
 dev_dependencies:
   flutter_test:

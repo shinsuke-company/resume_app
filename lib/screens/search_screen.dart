@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:resume_app/controller/search_bar_controller.dart';
 import 'package:resume_app/utils/hex_color.dart';
 import 'package:resume_app/screens/search_detail_screen.dart';
+import 'package:banner_listtile/banner_listtile.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   final String searchValue; //上位Widgetから受け取りたいデータ
@@ -15,8 +17,13 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   var color_gray = '757575'; // アイコン、文字色
 
-  final _sortMap = {0: "名前：昇順", 1: "名前：降順", 2: "かな：昇順", 3: "かな：降順"};
-  var _selectedSortItem = 0;
+  final _sortMap = {
+    'up_name': "名前：昇順",
+    'down_name': "名前：降順",
+    'up_ruby': "かな：昇順",
+    'down_ruby': "かな：降順"
+  };
+  var _selectedSortItem = 'up_name';
 
   late String searchValue;
 
@@ -129,43 +136,61 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _dropDownWidget(SearchBarController searchBarController) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16), //全方向に１０
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.center, //中央
-              height: 80,
-              color: Colors.yellow,
-              child: DropdownButton(
-                isExpanded: true,
-                // elevation: 16,
-                value: _selectedSortItem,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedSortItem = newValue as int;
-                  });
-                },
-                items: _sortMap.entries.map((entry) {
-                  return DropdownMenuItem(
-                    alignment: Alignment.center, //中央
-                    value: entry.key,
-                    child: Text(entry.value),
-                  );
-                }).toList(),
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Container(
+        alignment: Alignment.center, //中央
+        height: 56,
+        child: PopupMenuButton(
+          // elevation: 10,
+          splashRadius: 50,
+          tooltip: 'ソート順[ ${_sortMap[_selectedSortItem] as String} ]',
+          onCanceled: () {},
+          position: PopupMenuPosition.under,
+          iconSize: MediaQuery.of(context).size.width * 0.5,
+          icon: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _searchIcon(_selectedSortItem),
+              Padding(padding: EdgeInsets.only(right: 16)),
+              Text(
+                _sortMap[_selectedSortItem] as String,
+                style: TextStyle(
+                  color: HexColor(color_gray),
+                ),
               ),
-            ),
+            ],
           ),
-          Expanded(
-            child: Container(
-              color: Colors.blue,
-              height: 80,
-              width: 80, // 指定されても、Expanded に包まれると無視される
-            ),
-          ),
-        ],
+          itemBuilder: (context) {
+            return _sortMap.entries.map((entry) {
+              return PopupMenuItem(
+                mouseCursor: MouseCursor.defer,
+                value: entry.key,
+                child: Text(entry.value),
+              );
+            }).toList();
+          },
+          onSelected: (newValue) {
+            setState(() {
+              _selectedSortItem = newValue as String;
+            });
+          },
+        ),
       ),
     );
+  }
+
+  Widget _searchIcon(String selectedSortItem) {
+    return selectedSortItem.split('_')[0] == 'up'
+        ? Icon(
+            FontAwesomeIcons.arrowDownWideShort,
+            size: 24,
+            color: HexColor(color_gray),
+          )
+        : Icon(
+            FontAwesomeIcons.arrowDownShortWide,
+            size: 24,
+            color: HexColor(color_gray),
+          );
   }
 
   Widget _listWidget(
@@ -185,25 +210,34 @@ class _SearchScreenState extends State<SearchScreen> {
           itemBuilder: (context, index) {
             return Card(
               child: InkWell(
-                child: ListTile(
+                child: BannerListTile(
+                  imageContainerShapeZigzagIndex: index,
+                  backgroundColor: Colors.white,
+                  showBanner: false,
+                  bannerPositionRight: false,
+                  borderRadius: BorderRadius.circular(8),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
                             SearchDatailScreen(itemList[index], index)),
                   ),
-                  leading: Hero(
+                  title: Text(
+                    // style: TextStyle(fontSize: 20, color: Colors.white),
+                    itemList[index].name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  imageContainer: Hero(
                     tag: 'image${index}',
                     child: Image.network(
                       itemList[index].image,
                     ),
                   ),
-                  title: Text(
-                    itemList[index].name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  subtitle: Text(
+                    itemList[index].ruby,
+                    // style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  subtitle: Text(itemList[index].ruby),
                   trailing: PopupMenuButton(
                     icon: Icon(Icons.more_vert),
                     itemBuilder: (context) {
