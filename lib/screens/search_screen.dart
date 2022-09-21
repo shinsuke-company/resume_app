@@ -3,17 +3,49 @@ import 'package:provider/provider.dart';
 import 'package:resume_app/controller/search_bar_controller.dart';
 import 'package:resume_app/utils/hex_color.dart';
 import 'package:resume_app/screens/search_detail_screen.dart';
+import 'package:banner_listtile/banner_listtile.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
-  final color_gray = '757575';
+class SearchScreen extends StatefulWidget {
+  final String searchValue; //上位Widgetから受け取りたいデータ
+  const SearchScreen({Key? key, required this.searchValue}) : super(key: key);
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  var color_gray = '757575'; // アイコン、文字色
+
+  final _sortMap = {
+    'up_name': "名前：昇順",
+    'down_name': "名前：降順",
+    'up_ruby': "かな：昇順",
+    'down_ruby': "かな：降順"
+  };
+  var _selectedSortItem = 'up_name';
+
+  late String searchValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 受け取ったデータを状態を管理する変数に格納
+    searchValue = widget.searchValue;
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
         final controller = SearchBarController();
-        controller.init();
+        controller.init(searchValue);
+
+        if (searchValue != "") {
+          controller.isSearching = true;
+        }
+
         return controller;
       },
       child: Consumer<SearchBarController>(
@@ -30,21 +62,30 @@ class SearchScreen extends StatelessWidget {
           }
 
           return Scaffold(
-            key: searchBarController.globalKey,
-            appBar: AppBar(
-              centerTitle: true,
-              title: _appBarTitle(searchBarController),
-              actions: [
-                IconButton(
-                  icon: _appbarIcon(searchBarController),
-                  onPressed: searchBarController.isSearching
-                      ? searchBarController.searchEnd
-                      : searchBarController.searchStart,
-                ),
-              ],
-            ),
-            body: _listWidget(context, searchBarController),
-          );
+              key: searchBarController.globalKey,
+              appBar: AppBar(
+                centerTitle: true,
+                title: _appBarTitle(searchBarController),
+                actions: [
+                  IconButton(
+                    icon: _appbarIcon(searchBarController),
+                    onPressed: searchBarController.isSearching
+                        ? searchBarController.searchEnd
+                        : searchBarController.searchStart,
+                  ),
+                ],
+              ),
+              body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                        // ソート用のドロップダウンリスト
+                        child: _dropDownWidget(searchBarController)),
+                    Flexible(
+                      // 人物リスト
+                      child: _listWidget(context, searchBarController),
+                    ),
+                  ]));
         },
       ),
     );
@@ -64,9 +105,9 @@ class SearchScreen extends StatelessWidget {
 
   Widget _appBarTitle(SearchBarController searchBarController) {
     return searchBarController.isSearching
-        ? TextField(
+        ? TextFormField(
             autofocus: true,
-            cursorColor: Colors.white,
+            cursorColor: HexColor(color_gray),
             style: TextStyle(
               color: HexColor(color_gray),
             ),
@@ -80,6 +121,7 @@ class SearchScreen extends StatelessWidget {
                 color: HexColor(color_gray),
               ),
             ),
+            initialValue: searchValue, //ここに初期値
             onChanged: (word) {
               searchBarController.searchOperation(word);
             },
@@ -89,6 +131,65 @@ class SearchScreen extends StatelessWidget {
             style: TextStyle(
               color: HexColor(color_gray),
             ),
+          );
+  }
+
+  Widget _dropDownWidget(SearchBarController searchBarController) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Container(
+        alignment: Alignment.center, //中央
+        height: 56,
+        child: PopupMenuButton(
+          // elevation: 10,
+          splashRadius: 50,
+          tooltip: 'ソート順[ ${_sortMap[_selectedSortItem] as String} ]',
+          onCanceled: () {},
+          position: PopupMenuPosition.under,
+          iconSize: MediaQuery.of(context).size.width * 0.5,
+          icon: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _searchIcon(_selectedSortItem),
+              Padding(padding: EdgeInsets.only(right: 16)),
+              Text(
+                _sortMap[_selectedSortItem] as String,
+                style: TextStyle(
+                  color: HexColor(color_gray),
+                ),
+              ),
+            ],
+          ),
+          itemBuilder: (context) {
+            return _sortMap.entries.map((entry) {
+              return PopupMenuItem(
+                mouseCursor: MouseCursor.defer,
+                value: entry.key,
+                child: Text(entry.value),
+              );
+            }).toList();
+          },
+          onSelected: (newValue) {
+            setState(() {
+              _selectedSortItem = newValue as String;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _searchIcon(String selectedSortItem) {
+    return selectedSortItem.split('_')[0] == 'up'
+        ? Icon(
+            FontAwesomeIcons.arrowDownWideShort,
+            size: 24,
+            color: HexColor(color_gray),
+          )
+        : Icon(
+            FontAwesomeIcons.arrowDownShortWide,
+            size: 24,
+            color: HexColor(color_gray),
           );
   }
 
@@ -107,29 +208,57 @@ class SearchScreen extends StatelessWidget {
       return ListView.builder(
           itemCount: itemList.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        SearchDatailScreen(itemList[index], index)),
-              ),
-              child: Card(
-                child: ListTile(
-                  leading: Hero(
+            return Card(
+              child: InkWell(
+                child: BannerListTile(
+                  imageContainerShapeZigzagIndex: index,
+                  backgroundColor: Colors.white,
+                  showBanner: false,
+                  bannerPositionRight: false,
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SearchDatailScreen(itemList[index], index)),
+                  ),
+                  title: Text(
+                    // style: TextStyle(fontSize: 20, color: Colors.white),
+                    itemList[index].name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  imageContainer: Hero(
                     tag: 'image${index}',
                     child: Image.network(
                       itemList[index].image,
                     ),
                   ),
-                  title: Text(
-                    itemList[index].name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  subtitle: Text(
+                    itemList[index].ruby,
+                    // style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
-                  subtitle: Text(itemList[index].ruby),
-                  trailing: Icon(Icons.more_vert),
-                  minVerticalPadding: 20,
+                  trailing: PopupMenuButton(
+                    icon: Icon(Icons.more_vert),
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Edit'),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Delete'),
+                        )
+                      ];
+                    },
+                    onSelected: (String value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SearchDatailScreen(itemList[index], index)),
+                    ),
+                  ),
                 ),
               ),
             );

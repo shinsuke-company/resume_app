@@ -17,11 +17,11 @@ class SearchBarController extends ChangeNotifier {
 
   final scrollController = ScrollController();
 
-  void init() {
-    fetch();
+  void init(String searchValue) {
+    fetch(searchValue);
   }
 
-  Future<void> fetch() async {
+  Future<void> fetch(String searchValue) async {
     // データとってきたときにローディング何秒間出すか？
     await Future.delayed(const Duration(seconds: 1)).then((_) {
       // fetch data
@@ -29,7 +29,11 @@ class SearchBarController extends ChangeNotifier {
       allItemList = exampleList;
 
       isLoading = false;
-      notifyListeners();
+      if (searchValue != null) {
+        searchOperation(searchValue);
+      } else {
+        notifyListeners();
+      }
     });
   }
 
