@@ -17,13 +17,15 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   var color_gray = '757575'; // アイコン、文字色
 
+  var inputWord = '';
+  var _selectedSortItem = 'up_ruby';
+
   final _sortMap = {
-    'up_name': "名前：昇順",
-    'down_name': "名前：降順",
-    'up_ruby': "かな：昇順",
-    'down_ruby': "かな：降順"
+    'up_ruby': "名前：昇順",
+    'down_ruby': "名前：降順",
+    'up_age': "年齢：昇順",
+    'down_age': "年齢：降順"
   };
-  var _selectedSortItem = 'up_name';
 
   late String searchValue;
 
@@ -40,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return ChangeNotifierProvider(
       create: (context) {
         final controller = SearchBarController();
-        controller.init(searchValue);
+        controller.init(searchValue, _selectedSortItem);
 
         if (searchValue != "") {
           controller.isSearching = true;
@@ -123,7 +125,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             initialValue: searchValue, //ここに初期値
             onChanged: (word) {
-              searchBarController.searchOperation(word);
+              setState(() {
+                inputWord = word;
+              });
+
+              searchBarController.searchOperation(word, _selectedSortItem);
             },
           )
         : Text(
@@ -144,7 +150,6 @@ class _SearchScreenState extends State<SearchScreen> {
           // elevation: 10,
           splashRadius: 50,
           tooltip: 'ソート順[ ${_sortMap[_selectedSortItem] as String} ]',
-          onCanceled: () {},
           position: PopupMenuPosition.under,
           iconSize: MediaQuery.of(context).size.width * 0.5,
           icon: Row(
@@ -173,6 +178,7 @@ class _SearchScreenState extends State<SearchScreen> {
             setState(() {
               _selectedSortItem = newValue as String;
             });
+            searchBarController.fetch(inputWord, newValue as String);
           },
         ),
       ),
@@ -239,17 +245,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     // style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                   trailing: PopupMenuButton(
-                    icon: Icon(Icons.more_vert),
+                    icon: const Icon(Icons.more_vert),
                     itemBuilder: (context) {
                       return [
-                        PopupMenuItem(
-                          value: 'edit',
-                          child: Text('Edit'),
-                        ),
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Text('Delete'),
-                        )
+                        makePopupMenuItem('edit', FontAwesomeIcons.userPen),
+                        makePopupMenuItem('pdf', FontAwesomeIcons.filePdf),
+                        makePopupMenuItem('delete', FontAwesomeIcons.trash),
                       ];
                     },
                     onSelected: (String value) => Navigator.push(
@@ -264,5 +265,23 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           });
     }
+  }
+
+  PopupMenuItem<String> makePopupMenuItem(String itemValue, IconData icon) {
+    return PopupMenuItem(
+      value: itemValue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 24,
+            color: HexColor(color_gray),
+          ),
+          Padding(padding: EdgeInsets.only(right: 16)),
+          Text(itemValue.toUpperCase()),
+        ],
+      ),
+    );
   }
 }
