@@ -40,7 +40,7 @@ class _TopScreenState extends State<TopScreen> {
           Navigator.of(context).push(
             PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) {
-              return TestInfinity();
+              return SearchScreen(searchValue: '');
             }, transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
               final Offset begin = Offset(0.0, 1.0);
@@ -97,89 +97,59 @@ class DevelopmentLanguageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List devlist = [
+      {'icon': FontAwesomeIcons.react, 'language': 'react'},
+      {'icon': FontAwesomeIcons.vuejs, 'language': 'vuejs'},
+      {'icon': FontAwesomeIcons.angular, 'language': 'angular'},
+      {'icon': FontAwesomeIcons.js, 'language': 'js'},
+      {'icon': FontAwesomeIcons.node, 'language': 'node'},
+      {'icon': FontAwesomeIcons.java, 'language': 'java'},
+      {'icon': FontAwesomeIcons.php, 'language': 'php'},
+      {'icon': FontAwesomeIcons.python, 'language': 'python'},
+      {'icon': FontAwesomeIcons.c, 'language': 'c'},
+      {'icon': FontAwesomeIcons.rust, 'language': 'rust'},
+      {'icon': FontAwesomeIcons.android, 'language': 'android'},
+      {'icon': FontAwesomeIcons.apple, 'language': 'apple'},
+      {'icon': FontAwesomeIcons.swift, 'language': 'swift'},
+      {'icon': FontAwesomeIcons.unity, 'language': 'unity'},
+      {'icon': FontAwesomeIcons.f, 'language': 'f'},
+    ];
+
     return Container(
         height: SizeConfig.blockSizeVertical! * 29,
         // color: Colors.amber,
-        child: GridView.count(
-          crossAxisCount: 5, //カラム数
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, //カラム数
+          ),
+          itemCount: devlist.length,
           shrinkWrap: true,
-          children: [
-            ElevatedButton.icon(
+          itemBuilder: (context, index) {
+            return ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.react),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.vuejs),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.angular),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.js),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.node),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.java),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.php),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.python),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.c),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.rust),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.android),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.apple),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.swift),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.f),
-                label: Text('')),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-                icon: Icon(FontAwesomeIcons.unity),
-                label: Text('')),
-          ],
+                onPressed: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                      return SearchScreen(
+                          searchValue: devlist[index]['language']);
+                    }, transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                      final Offset begin = Offset(0.0, 1.0);
+                      final Offset end = Offset.zero;
+                      final Animatable<Offset> tween =
+                          Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: Curves.easeInOut));
+                      final Animation<Offset> offsetAnimation =
+                          animation.drive(tween);
+                      return SlideTransition(
+                          position: offsetAnimation, child: child);
+                    }),
+                  );
+                },
+                icon: Icon(devlist[index]['icon']),
+                label: Text(''));
+          },
         ));
   }
 }
@@ -202,13 +172,5 @@ class _RecommendEngineerState extends State<RecommendEngineer> {
       height: SizeConfig.blockSizeVertical! * 28,
       color: Colors.amber,
     );
-  }
-
-  Future<void> _getContents() async {
-    await Future.delayed(const Duration(seconds: 3));
-    for (int i = _lastIndex; i < _lastIndex + loadLength; i++) {
-      _contents.add('Item $i');
-    }
-    _lastIndex += loadLength;
   }
 }
