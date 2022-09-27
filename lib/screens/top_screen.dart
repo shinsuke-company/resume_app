@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'search_screen.dart';
 import 'package:resume_app/utils/size_config.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'test_inifinty.dart';
 
 class TopScreen extends StatefulWidget {
@@ -114,43 +115,427 @@ class DevelopmentLanguageList extends StatelessWidget {
       {'icon': FontAwesomeIcons.unity, 'language': 'unity'},
       {'icon': FontAwesomeIcons.f, 'language': 'f'},
     ];
-
     return Container(
-        height: SizeConfig.blockSizeVertical! * 29,
-        // color: Colors.amber,
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, //カラム数
-          ),
-          itemCount: devlist.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                      return SearchScreen(
-                          searchValue: devlist[index]['language']);
-                    }, transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                      final Offset begin = Offset(0.0, 1.0);
-                      final Offset end = Offset.zero;
-                      final Animatable<Offset> tween =
-                          Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: Curves.easeInOut));
-                      final Animation<Offset> offsetAnimation =
-                          animation.drive(tween);
-                      return SlideTransition(
-                          position: offsetAnimation, child: child);
-                    }),
-                  );
-                },
-                icon: Icon(devlist[index]['icon']),
-                label: Text(''));
-          },
-        ));
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Row(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'react');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.react),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'vuejs');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.vuejs),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'angular');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.angular),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'js');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.js),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'node');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.node),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'java');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.java),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'php');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.php),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'python');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.python),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'c');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.c),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'rust');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.rust),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'android');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.android),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'apple');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.apple),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'python');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.python),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'swift');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.swift),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen(searchValue: 'Flutter');
+                  }, transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                    final Offset begin = Offset(0.0, 1.0);
+                    final Offset end = Offset.zero;
+                    final Animatable<Offset> tween =
+                        Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: Curves.easeInOut));
+                    final Animation<Offset> offsetAnimation =
+                        animation.drive(tween);
+                    return SlideTransition(
+                        position: offsetAnimation, child: child);
+                  }),
+                );
+              },
+              child: Container(
+                // color: Colors.amberAccent,
+                height: SizeConfig.blockSizeVertical! * 9,
+                width: SizeConfig.blockSizeVertical! * 9,
+                child: Icon(FontAwesomeIcons.f),
+              ),
+            ),
+          ],
+        ),
+      ]),
+    );
   }
 }
 
